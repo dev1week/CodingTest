@@ -1,139 +1,107 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
-import java.io.*;
-import java.util.*;
-
-public class Solution{
-    static BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-    static StringTokenizer tokens;
-    
-    static int[][] map;
-    static int d; //세로
-    static int w; //가로 
-    
-    static int k; 
-    //동일한 특성의 셀들이 k개 이상 연속적으로 있는 경우에만 통과 
-    
-    
-    //약품 
-    	//행의 모든 특성이 a or b로 변함 
-    
-    
-    
-    //약품의 투입횟수 0으로 
-    
-    
-    static int[] selecteds; 
-    static int result;
-    
-    //w개의 power set 구하기 3^13 
-    
-    static int[][] inject(){
-    	int[][] testMap = new int[d][w]; 
-    	
-    	for(int x=0; x<d; x++) {
-    		for(int y=0; y<w; y++) {
-    			testMap[x][y] = map[x][y]; 
-    		}
-    	}
-    	
-    	for(int row=0; row<d; row++) {
-    		if(selecteds[row]!=-1) {
-    			Arrays.fill(testMap[row], selecteds[row]);
-    		}
-    	}
-    	return testMap; 
-    }
-    
-    static boolean isPossible(int[][] testMap) {
-    	int rowCount = 0; 
-    	for(int y=0; y<w; y++) {
-    		for(int sx=0; sx<d-k+1; sx++) {
-    			int sameCount =1; 
-    			for(int offset=1; offset<k; offset++) {
-    				if(testMap[sx][y] == testMap[sx+offset][y]) {
-    					sameCount++;
-    				}else {
-    					break; 
-    				}
-    			}
-    			if(sameCount>=k) {
-    				rowCount ++;
-    				break; 
-    			}
-    			
-    		}
-    		
-    	}
-    	
-    	return  rowCount == w; 
-    }
-    
-    static void bt(int cur, int count) {
-		if(count>=result) return; 
-
-    	if(cur==d) {
-    		//약 적용하기 
-    		int[][] testMap = inject(); 
-    		
-    		//한 행씩 돌아가면서 합격기준 확인하기 d*w
-    		if(isPossible(testMap)) {
-    			
-    			result = Math.min(result, count);
-    		}
-    		return;
-    	}
-    	
-    	//약 a로 넣을 경우 
-    	selecteds[cur] = 0; 
-    	bt(cur+1, count+1);
-    	
-    	//약 b로 넣을 경우 
-    	selecteds[cur] = 1;
-    	bt(cur+1, count+1);
-    	
-    	//약 안 넣을 경우 
-    	selecteds[cur] = -1;
-    	bt(cur+1, count);
-    }
-    
-    
-    public static void main(String[] args)throws IOException{
-    	int T = Integer.valueOf(buffer.readLine()); 
-    	StringBuilder sb = new StringBuilder(); 
-    	for(int t=1; t<=T; t++) {
-			init(); 
-			bt(0,0);
-			sb.append("#").append(t).append(" ").append(result).append("\n");
-	    }
-    	System.out.println(sb);
-    	
-    }
-    
-    static void print(int[][] arr) {
-    	for(int[] ar: arr) {
-    		for(int a: ar) {
-    			System.out.print(a+" ");
-    		}System.out.println();
-    	}
-    }
-    
-    static void init() throws IOException{
-    	
-		tokens = new StringTokenizer(buffer.readLine()); 
-		d = Integer.valueOf(tokens.nextToken());
-		w = Integer.valueOf(tokens.nextToken());
-		k = Integer.valueOf(tokens.nextToken()); 
+// 완탐!
+// 모든 경우의 수 <= 3가지, 
+//  1: 특정 막에 약 사용 X
+//  2: 특정 막에 약 A 사용
+//  3: 특정 막에 약 B 사용
+public class Solution {
+	
+	static int T, D, W, K, min;
+	static int[][] film, copy; // copy 는 완탐과정에서 film 배열을 변경해 본후, 원복용도
+	static StringBuilder sb = new StringBuilder();
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		T = Integer.parseInt(br.readLine());
 		
-		map = new int[d][w];
-		
-		for(int x=0;x<d; x++) {
-			tokens = new StringTokenizer(buffer.readLine());
-			for(int y=0; y<w; y++) {
-				map[x][y] = Integer.valueOf(tokens.nextToken()); 
+		for (int t = 1; t <= T; t++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			D = Integer.parseInt(st.nextToken());
+			W = Integer.parseInt(st.nextToken());
+			K = Integer.parseInt(st.nextToken());
+			
+			film = new int[D][W];
+			copy = new int[D][W];
+			
+			for (int i = 0; i < D; i++) {
+				st = new StringTokenizer(br.readLine());
+				for (int j = 0; j < W; j++) {
+					film[i][j] = copy[i][j] = Integer.parseInt(st.nextToken());
+				}
 			}
+			
+			// 풀이
+			if( K == 1 ) { // 약품을 사용하지 않아도 모두 통과
+				sb.append("#").append(t).append(" ").append(0).append("\n");
+				continue;
+			}
+			min = Integer.MAX_VALUE;
+			dfs( 0, 0 ); // 맨 위, 약품은 사용안한 상태
+			
+			sb.append("#").append(t).append(" ").append(min).append("\n");
+		}
+		System.out.println(sb);
+	}
+
+	// idx 막 시작~끝
+	// cnt 약품 몇 번 사용
+	// 바닥(마지막)까지 따지면 check 후 min 갱신
+	static void dfs(int idx, int cnt) {
+		// 현재 idx까지 기준으로 유효성 검사
+		if( check() ) { // idx 까지 따졌는데 모두 검사 통과
+			min = Math.min(min, cnt);
+			return;
 		}
 		
-		result = Integer.MAX_VALUE; 
-		selecteds = new int[d];
-    }
+		// 기저조건
+		if( idx == D ) return;
+		
+		// 가지치기
+		if( min <= cnt ) return;
+		
+		// 약품을 사용하지 않음
+		dfs( idx + 1, cnt); // cnt는 변화 X
+		
+		// 약품 A 를 사용
+		// idx 막(row) 0 변경
+		Arrays.fill(film[idx], 0);
+		dfs( idx + 1, cnt + 1);
+		
+		// 약품 B 를 사용
+		// idx 막(row) 1 변경
+		Arrays.fill(film[idx], 1);
+		dfs( idx + 1, cnt + 1);
+		
+		// 현재  film[idx] 원복
+		film[idx] = Arrays.copyOf(copy[idx], W);
+	}
+	
+	// 전체 film 배열을 검증
+	// 옆으로 가면서 ( 바깥쪽 for )
+	//   밑으로 가면서 검증
+	static boolean check() {
+		
+		for (int j = 0; j < W; j++) {
+			
+			// 각 열별로 성공 여부
+			boolean success = false;
+			int cnt = 1; // 시작 숫자 
+			for (int i = 1; i < D; i++) {// 2막
+				if( film[i][j] == film[i-1][j] ) cnt++;
+				else cnt = 1;
+				
+				if( cnt == K ) {
+					success = true;
+					break; // 아래로 더 따질 필요 X
+				}
+				// success <= true
+			}
+			
+			if( !success ) return false;
+		}
+		return true;
+	}
 }
