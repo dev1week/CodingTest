@@ -4,11 +4,15 @@
 
 ### 성능 요약
 
-메모리: 14272 KB, 시간: 128 ms
+메모리: 14256 KB, 시간: 128 ms
 
 ### 분류
 
 너비 우선 탐색, 브루트포스 알고리즘, 깊이 우선 탐색, 그래프 이론, 그래프 탐색, 구현, 최소 스패닝 트리
+
+### 제출 일자
+
+2023년 10월 11일 21:03:58
 
 ### 문제 설명
 
@@ -29,8 +33,8 @@
 <table class="table table-bordered" style="width: 100%;">
 	<tbody>
 		<tr>
-			<td style="width: 50%; text-align: center;"><img alt="" src="" style="width: 220px; height: 195px;"></td>
-			<td style="width: 50%; text-align: center;"><img alt="" src="" style="width: 220px; height: 195px;"></td>
+			<td style="width: 50%; text-align: center;"><img alt="" src="https://upload.acmicpc.net/41f71ecc-97b4-4351-b741-4b8336576246/-/preview/" style="width: 220px; height: 195px;"></td>
+			<td style="width: 50%; text-align: center;"><img alt="" src="https://upload.acmicpc.net/3b158fdf-74ba-47d7-a224-9e5b753b8453/-/preview/" style="width: 220px; height: 195px;"></td>
 		</tr>
 		<tr>
 			<td style="width: 50%; text-align: center;">
@@ -50,9 +54,9 @@
 <table class="table table-bordered" style="width: 100%;">
 	<tbody>
 		<tr>
-			<td style="width: 33%; text-align: center;"><img alt="" src="" style="width: 220px; height: 194px;"></td>
-			<td style="width: 34%; text-align: center;"><img alt="" src="" style="width: 220px; height: 195px;"></td>
-			<td style="width: 33%; text-align: center;"><img alt="" src="" style="width: 220px; height: 196px;"></td>
+			<td style="width: 33%; text-align: center;"><img alt="" src="https://upload.acmicpc.net/c7c663a1-4ebb-4c89-9a6a-4157513c1a30/-/preview/" style="width: 220px; height: 194px;"></td>
+			<td style="width: 34%; text-align: center;"><img alt="" src="https://upload.acmicpc.net/390361f9-0647-4ff8-9709-7c1de26c0929/-/preview/" style="width: 220px; height: 195px;"></td>
+			<td style="width: 33%; text-align: center;"><img alt="" src="https://upload.acmicpc.net/2a1d4415-0a0d-4508-8a14-1956fdf650ec/-/preview/" style="width: 220px; height: 196px;"></td>
 		</tr>
 		<tr>
 			<td style="width: 33%; text-align: center;">C의 방향이 중간에 바뀌었다</td>
@@ -67,8 +71,8 @@
 <table class="table table-bordered" style="width: 100%;">
 	<tbody>
 		<tr>
-			<td style="width: 50%; text-align: center;"><img alt="" src="" style="width: 220px; height: 195px;"></td>
-			<td style="width: 50%; text-align: center;"><img alt="" src="" style="width: 220px; height: 195px;"></td>
+			<td style="width: 50%; text-align: center;"><img alt="" src="https://upload.acmicpc.net/b6f340e2-8248-4385-9a6a-546e7a2648e4/-/preview/" style="width: 220px; height: 195px;"></td>
+			<td style="width: 50%; text-align: center;"><img alt="" src="https://upload.acmicpc.net/dd98ec33-6796-455d-a612-8db31a9806f0/-/preview/" style="width: 220px; height: 195px;"></td>
 		</tr>
 		<tr>
 			<td style="width: 50%; text-align: center;vertical-align: middle;">
