@@ -1,51 +1,70 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
- 
-public class Main {
- 
-    static int N, M, res, parents[];
-    
-    public static void main(String[] args) throws IOException {
- 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
+
+import java.io.*;
+import java.util.*;
+
+class Main{
+
+
+    static BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+    static StringTokenizer tokens;
+
+
+
+    //n개의 점
+
+    //두 점을 선택해서 연결하는 선분을 긋는다.
+
+    //사이클을 완성하는 순간 게임을 종료한다.
+
+    //몇번째에서 사이클이 완성되었는지, 끝나지 않았는지 판단하기
+
+    static int n; //점의 개수 5*10^5
+    static int m; //진행된 횟수 10^6
+    static int[] parents;
+
+
+    static boolean isConnected(int x, int y){
+        if(find(x)==find(y)) return false;
+        parents[find(y)] = find(x);
+        return true;
+    }
+
+    static int find(int x){
+        if(parents[x]==x)return x;
+
+
+        return parents[x] =find(parents[x]);
+    }
+
+
+
+    public static void main(String[] args) throws IOException{
+
+
+        tokens = new StringTokenizer(buffer.readLine());
+
+        n = Integer.valueOf(tokens.nextToken());
+        m = Integer.valueOf(tokens.nextToken());
+
+        parents = new int[n];
         
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
- 
-        parents = new int[N];
-        for (int i = 0; i < N; i++) {
-            parents[i] = i;
+        for(int i=0; i<n; i++) {
+        	parents[i] = i; 
         }
-        
-        for (int i = 1; i <= M; i++) {
-            st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            // 사이클이 형성되는지 확인
-            if(!union(a, b)) {
-                res = i;
+
+
+        int result = 0;
+        for(int game=1; game<=m; game++){
+            tokens = new StringTokenizer(buffer.readLine());
+            int x= Integer.valueOf(tokens.nextToken());
+            int y= Integer.valueOf(tokens.nextToken());
+            if(!isConnected(x,y)){
+                result = game;
                 break;
             }
         }
-        
-        System.out.println(res);
+
+        System.out.println(result);
+
     }
- 
-    private static boolean union(int a, int b) {
-        int aRoot = find(a); // a의 root 노드
-        int bRoot = find(b); // b의 root 노드
-        // a와 b의 root 노드가 같다면 사이클 형성
-        if(aRoot == bRoot) return false;
-        parents[bRoot] = aRoot;
-        return true;
-    }
- 
-    private static int find(int n) {
-        if(n == parents[n]) return n;
-        return parents[n] = find(parents[n]);
-    }
- 
 }
