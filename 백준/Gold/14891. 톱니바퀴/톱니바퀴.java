@@ -1,164 +1,93 @@
-
 import java.io.*;
+
+
 import java.util.*;
 
+class Main {
+    static int[][] wheel = new int[4][8];
 
-public class Main {
-    static BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-    static StringTokenizer tokens;
-    
-    //톱니 바퀴 4개 
-    
-    //각 톱니바퀴 당 날은 8개 
-    
-    static int k; //톱니 바퀴 회전 수 
-    
-    //다음 톱니 회전 
-    	//맞물린 톱니의 극이 다를 경우에만 
-    		//이전 톱니의 반대 방향으로 회전 
-    
-    
-    static int result; // 톱니 바퀴 점수 총합 
-    
-    
-    static int[][] gears; 
-    
-    
-    static int[][] commands;
-    
-    static void init() throws IOException{
-    	gears = new int[4][8];
-    	
-    	for(int x=0; x<4; x++) {
-    		String line = buffer.readLine();
-    		for(int y=0; y<8; y++) {
-    			gears[x][y] = Integer.valueOf(line.charAt(y)-'0');
-    		}
-    	}
-    	
-    	k = Integer.valueOf(buffer.readLine());
-    	
-    	commands = new int[k][2];
-    	
-    	for(int i=0; i<k; i++) {
-    		tokens = new StringTokenizer(buffer.readLine());
-    		commands[i][0] = Integer.valueOf(tokens.nextToken())-1; 
-    		commands[i][1] = Integer.valueOf(tokens.nextToken());
-    	}
-    	
-    }
-    
-    static void print(int[][] map) {
-    	for(int[] ma: map) {
-    		for(int m : ma) 
-    		{
-    			System.out.print(m);
-    		}System.out.println(); 
-		}
-    	
-    }
-    
-    static int[] getDirs(int targetRow, int option) {
-    	int[] gearDirs = new int[4];
-    	int prevOpt = option; 
-    	int nextOpt = option; 
-    	
-    	gearDirs[targetRow] = option; 
-    	
-    	//targetRow 전 기준으로 봐보기 
-    	for(int row= targetRow; row>=1; row--) {
-    		if(gears[row][6]!=gears[row-1][2]) {
-    			if(prevOpt==-1) {
-    				prevOpt = 1;
-    			}else if(prevOpt==1) {
-    				prevOpt = -1; 
-    			}
-    			gearDirs[row-1] = prevOpt;
-    		}else {
-    			break; 
-    		}
-    	}
-    	
-    	
-    	//targetRow 이후 기준으로 봐보기 
-    	for(int row=targetRow; row<3; row++) {
-    		if(gears[row][2]!=gears[row+1][6]) {
-    			if(nextOpt==-1) {
-    				nextOpt = 1;
-    			}else if(nextOpt==1) {
-    				nextOpt = -1; 
-    			}
-    			gearDirs[row+1] = nextOpt;
-    		}else {
-    			break; 
-    		}
-    	}
-    	
-    	return gearDirs; 
-    }
-    
-    public static void main(String[] args)throws IOException{
-    	init(); 
-    	
-    	for(int i=0; i<k; i++) {
-        	int[] gearDirs = getDirs(commands[i][0], commands[i][1]); //각 톱니바퀴 회전방향 구하기 0,-1,1 =>  
-        	gears = next(gearDirs); 
-        	//gearDirs 바탕으로 gears 배열 변경 
-        	
-    	}
-    	System.out.println(getScore()); 
-    }
-    
-    static int[][] next(int[] getDirs){
-    	int[][] nextGears = new int[4][8];
-    	
-    	for(int row=0; row<4; row++) {
-    		if(getDirs[row]==1) {
-    			nextGears[row] = rotate(row);
-    		}else if(getDirs[row]==-1) {
-    			nextGears[row] = reverseRotate(row);
-    		}else {
-    			nextGears[row] = gears[row]; 
-    		}
-    	}
-    	return nextGears; 
-    }
-    
-    
-    static int[] rotate(int row) {
-    	int[] nextGear = new int[8]; 
-    	int tmp = gears[row][7]; 
-    	
-    	for(int i=7; i>=1; i--) {
-    		nextGear[i] = gears[row][i-1];
-    	}
-    	nextGear[0] = tmp; 
-    	return nextGear; 
-    }
-    
-    static int[] reverseRotate(int row) {
-    	int[] nextGear = new int[8]; 
-    	int tmp = gears[row][0]; 
-    	
-    	for(int i=0; i<7; i++) {
-    		nextGear[i] = gears[row][i+1];
-    	}
-    	nextGear[7] = tmp; 
-    	return nextGear; 
-    }
-    
-    
-    static int getScore() {
-    	int score = 0;
-    	int partScore = 1; 
-    	
-    	for(int gear=0; gear<4; gear++) {
-    		score += gears[gear][0] * partScore; 
-    		partScore*=2;
-    	}
-    	return score; 
-    }
-    
    
-    
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String line;
+        for (int i = 0; i < 4; i++) {
+            line = br.readLine();
+            for (int j = 0; j < 8; j++) {
+                wheel[i][j] = Integer.parseInt(String.valueOf(line.charAt(j)));
+            }
+        }
+        int K = Integer.parseInt(br.readLine());
+
+        StringTokenizer st;
+        for (int i = 0; i < K; i++) {
+            st = new StringTokenizer(br.readLine());
+            turnLogic(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+        }
+        int answer = 0;
+        if (wheel[0][0] == 1) answer += 1;
+        if (wheel[1][0] == 1) answer += 2;
+        if (wheel[2][0] == 1) answer += 4;
+        if (wheel[3][0] == 1) answer += 8;
+        System.out.println(answer);
+    }
+
+    public static void turnLogic(int wheelNum, int dir) {
+        int[] dx = {-1, 1};
+        Queue<Turn> searchQ = new ArrayDeque<>();
+        Queue<Turn> q = new ArrayDeque<>();
+        searchQ.add(new Turn(wheelNum - 1, dir));
+        q.add(new Turn(wheelNum - 1, dir));
+        boolean[] visit = new boolean[4];
+        visit[wheelNum - 1] = true;
+        while (!searchQ.isEmpty()) {
+            Turn cur = searchQ.poll();
+            for (int i = 0; i < 2; i++) {
+                int newWheel = cur.wheel + dx[i];
+                if (newWheel >= 4 || newWheel < 0 || visit[newWheel]) continue;
+                visit[newWheel] = true;
+                if (i == 0 && wheel[cur.wheel][6] != wheel[newWheel][2]) {
+                    searchQ.add(new Turn(newWheel, -cur.dir));
+                    q.add(new Turn(newWheel, -cur.dir));
+                } else if (i == 1 && wheel[cur.wheel][2] != wheel[newWheel][6]) {
+                    searchQ.add(new Turn(newWheel, -cur.dir));
+                    q.add(new Turn(newWheel, -cur.dir));
+                }
+            }
+        }
+        while (!q.isEmpty()) {
+            Turn cur = q.poll();
+            turnWheel(cur.wheel, cur.dir);
+        }
+    }
+
+    public static void turnWheel(int wheelNum, int dir) {
+        int[] target = wheel[wheelNum];
+        if (dir == 1) {
+            int move = target[0];
+            for (int i = 0; i < 7; i++) {
+                int second = target[i + 1];
+                target[i + 1] = move;
+                move = second;
+            }
+            target[0] = move;
+        } else if (dir == -1) {
+            int move = target[7];
+            for (int i = 7; i > 0; i--) {
+                int second = target[i - 1];
+                target[i - 1] = move;
+                move = second;
+            }
+            target[7] = move;
+        }
+
+    }
+}
+
+class Turn {
+    int wheel, dir;
+
+    public Turn(int wheel, int dir) {
+        this.wheel = wheel;
+        this.dir = dir;
+    }
 }
