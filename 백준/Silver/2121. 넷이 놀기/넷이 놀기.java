@@ -65,14 +65,10 @@ public class Main {
         Arrays.sort(positions);
 
 
-        int result = 0;
-        for (Position position : positions) {
+        long result = Arrays.stream(positions)
+                .filter(p->isValid(positions, p, a,b))
+                .count();
 
-            if (isValid(positions, position, a,b)) {
-                result++;
-            }
-
-        }
 
         System.out.println(result);
 
