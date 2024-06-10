@@ -41,7 +41,7 @@ public class Main {
         int bNum = Integer.valueOf(tokens.nextToken());
 
         int[] aSet = getArr();
-        Arrays.sort(aSet); 
+        
         int[] bSet = getArr();
         Arrays.sort(bSet);
 
@@ -53,7 +53,8 @@ public class Main {
                 result.add(a);
             }
         }
-
+        
+        Collections.sort(result); 
         StringBuilder resultPrint = new StringBuilder();
 
         resultPrint.append(count).append("\n");
