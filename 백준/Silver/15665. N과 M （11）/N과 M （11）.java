@@ -1,98 +1,55 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
-    static BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-    static StringTokenizer tokens;
+    public static int n, m;
+    public static int[] arr, nums;
+    //public static boolean[] visit; // 방문 여부
+    public static StringBuilder sb = new StringBuilder();
 
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-    //정렬한다.
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
 
-    //n개를 뽑는다.
+        arr = new int[m];
+        //visit = new boolean[n + 1];
 
-    //중복 조합 이다.
+        nums = new int[n + 1];
 
-    //해당 숫자가 쓰였는지 판단한다.
-
-    // 1 7 9 9
-
-
-    static StringBuilder resultNumbers;
-
-    static Set<String> set;
-    static int[] numbers;
-
-    static int n;
-    static int m;
-
-
-    private static String convert(List<Integer>selecteds){
-
-        StringBuilder part = new StringBuilder();
-
-        part.append(selecteds.get(0));
-
-        for(int idx=1; idx<selecteds.size(); idx++){
-            part.append(" ");
-
-
-            part.append(selecteds.get(idx));
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) {
+            nums[i] = Integer.parseInt(st.nextToken());
         }
+        Arrays.sort(nums);
 
-
-        return part.toString();
-
-
+        dfs(0);
+        System.out.println(sb);
     }
-    private static void bt(int current, List<Integer> selecteds){
 
-        if(current==m){
-            String data = convert(selecteds);
-            //변환하기
-            //증가하지 않는 경우 null 반환
-            if(data == null) return;
+    public static void dfs(int cnt) {
 
-            if(set.contains(data)) return;
-            set.add(data);
-            resultNumbers.append(data).append("\n");
-
-
+        if (cnt == m) {
+            for (int val : arr) {
+                sb.append(val).append(" ");
+            }
+            sb.append("\n");
             return;
         }
 
-
-        for(int nextIdx=0;nextIdx<n; nextIdx++){
-
-            selecteds.add(numbers[nextIdx]);
-            bt(current+1, selecteds);
-            selecteds.remove(selecteds.size()-1);
+        int before = 0;
+        for (int i = 0; i <= n; i++) {
+            if (before != nums[i]) {
+                arr[cnt] = nums[i];
+                before = nums[i];
+                dfs(cnt + 1);
+            }
 
         }
-
     }
-
-
-    public static void main(String[] args) throws IOException {
-        tokens = new StringTokenizer(buffer.readLine());
-
-        n = Integer.valueOf(tokens.nextToken());
-        m = Integer.valueOf(tokens.nextToken());
-
-
-        set= new HashSet<>();
-        resultNumbers = new StringBuilder();
-
-
-        numbers = Arrays.stream(buffer.readLine().split("\\s+")).mapToInt(Integer::parseInt).sorted().toArray();
-
-        bt(0, new ArrayList<>());
-
-        System.out.println(resultNumbers);
-
-
-    }
-
-
-
-
 }
