@@ -1,63 +1,50 @@
 import java.util.*; 
-
-class Point{
-    int x, y;
-    
-    public Point(int x, int y){
-        this.x = x;
-        this.y = y;
-    }
-    
-    public String toString(){
-        return this.x+":"+this.y; 
-    }
-}
-
 class Solution {
+    private static boolean[][] map; 
+    private static int[][] memo; 
     
-    private static final int STATIC = 1000000007; 
-
+    private static int width; 
+    private static int height; 
     
-    private static boolean[][] isPuddles; 
-    private static int[][] memory; 
-    private static List<Point> route = new ArrayList<>(); 
+    public int solution(int m, int n, int[][] puddles) {
+        map = new boolean[n+1][m+1]; 
+        memo = new int[n+1][m+1]; 
+        
+        for(int[] me : memo){
+            Arrays.fill(me, -1); 
+        }
+        
+        width = m; 
+        height = n; 
+        
+        for(int[] puddle:puddles){
+            map[puddle[1]][puddle[0]] = true; 
+        }
+        return dfs(1,1);
+    }
+    static boolean canGo(int x, int y){
+        return isValid(x, y)&&!map[x][y];
+    }
     
-    private static int dfs(int currentX, int currentY, int height, int width){
-                
-       if(currentY == height && currentX == width){
+    static boolean isValid(int x, int y){
+        return x>=1&&y>=1&&x<=height&&y<=width; 
+    }
+    
+    static int dfs(int x, int y){
+        
+        if(x==height&&y==width){
             return 1; 
         }
         
-        if(currentY>height||currentX>width){
-            return 0; 
+        if(!isValid(x,y))return 0; 
+        
+        if(map[x][y]) return 0; 
+        
+        
+        if(memo[x][y]!=-1){
+            return memo[x][y]%1000000007; 
         }
         
-        if(isPuddles[currentY][currentX]){
-            return 0; 
-        }
-        
-        if(memory[currentY][currentX]!=-1){
-            return memory[currentY][currentX];
-        }
-        
-        return memory[currentY][currentX] = (dfs(currentX+1, currentY, height, width) + dfs(currentX, currentY+1, height, width))%STATIC;         
-        
-    }
-    
-    public int solution(int width, int height, int[][] puddles) {
-        
-        
-        isPuddles = new boolean[height+1][width+1];
-        memory = new int[height+1][width+1];
-        for(int[] puddle : puddles){
-            isPuddles[puddle[1]][puddle[0]] = true; 
-        }
-        
-        for(int[] mem : memory){
-            Arrays.fill(mem, -1);
-        }
-        
-        
-        return dfs(1, 1, height, width);
+        return memo[x][y] = (dfs(x+1,y) + dfs(x, y+1))%1000000007; 
     }
 }
