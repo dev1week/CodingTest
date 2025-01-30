@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException{
         int t = Integer.parseInt(buffer.readLine());
-
+        StringBuilder totResult = new StringBuilder();
         for(int test=0; test<t; test++){
             int n = Integer.parseInt(buffer.readLine());
 
@@ -19,8 +19,12 @@ public class Main {
 
             int m = Integer.parseInt(buffer.readLine());
 
-            System.out.println( getResult(note1, m));
+            totResult.append( getResult(note1, m));
+            if(test!=t-1){
+                totResult.append("\n");
+            }
         }
+        System.out.println(totResult);
 
 
     }
