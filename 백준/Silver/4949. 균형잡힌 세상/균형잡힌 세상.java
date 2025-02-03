@@ -21,6 +21,12 @@ public class Main {
         String sentence;
 
         StringBuilder result = new StringBuilder();
+
+        System.out.println(getResult(result));
+    }
+
+    private static String getResult(StringBuilder result) throws IOException {
+        String sentence;
         while(!(sentence = buffer.readLine()).equals(".")){
 
             char[] data = sentence.toCharArray();
@@ -29,27 +35,31 @@ public class Main {
 
             result.append(test(data, stack)).append("\n");
         }
-        System.out.println(result);
+        return result.toString();
     }
 
     private static String test(char[] data, Stack<Character> stack) {
-        for(char c: data){
-            if(c == SMALL_START){
+        for (char c : data) {
+            if (isStart(c)) {
                 stack.add(c);
-            }else if(c == SMALL_END){
-                if (!isPossible(stack, SMALL_END)) return NO;
-            }else if(c== BIG_START){
-                stack.add(c);
-            }else if(c==BIG_END){
-                if (!isPossible(stack, BIG_END)) return NO;
+            }else if(isEnd(c)){
+                if( !isPossible(stack, c)) return NO;
             }
         }
 
-        if(stack.size()!=0||stack.size()!=0){
+        if(!stack.isEmpty()){
             return NO;
         }else{
             return YES;
         }
+    }
+
+    private static boolean isEnd(char c) {
+        return c == BIG_END || c == SMALL_END;
+    }
+
+    private static boolean isStart(char c) {
+        return c == SMALL_START || c == BIG_START;
     }
 
     private static boolean isPossible( Stack<Character> stack, char data) {
