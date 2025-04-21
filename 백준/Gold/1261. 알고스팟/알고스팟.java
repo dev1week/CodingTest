@@ -60,7 +60,6 @@ public class Main {
         int[][] dist = new int[n][m];
 
         for(int x=0; x<n; x++) {
-
             Arrays.fill(dist[x], MAX_DIST);
         }
         dist[0][0] = 0;
@@ -72,16 +71,20 @@ public class Main {
             Node current = pq.poll();
 
             if(dist[current.x][current.y]!=current.cnt)continue;
+            
+            for(int[] d: directions){
+                int nx = current.x+d[X];
+                int ny = current.y+d[Y];
 
-            for(Node next: graph[current.x][current.y]){
+                if(isValid(nx, ny,n,m)){
 
+                    int newDist = dist[current.x][current.y] + map[nx][ny];
 
+                    if(newDist<dist[nx][ny]){
+                        pq.add(new Node(nx, ny, newDist));
+                        dist[nx][ny] = newDist;
+                    }
 
-                int newDist = dist[current.x][current.y] + next.cnt;
-
-                if(newDist<dist[next.x][next.y]){
-                    pq.add(new Node(next.x, next.y, newDist));
-                    dist[next.x][next.y] = newDist;
                 }
             }
         }
