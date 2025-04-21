@@ -30,32 +30,7 @@ public class Main {
             }
         }
 
-
-
-        List<Node>[][] graph = new List[n][m];
-
-
-
-        for(int x=0; x<n; x++){
-            for(int y=0; y<m; y++){
-                graph[x][y] = new ArrayList<>();
-            }
-        }
-
-
-        for(int x=0; x<n; x++){
-            for(int y=0; y<m; y++){
-                for(int[] d: directions){
-                    int nx = x+d[X];
-                    int ny = y+d[Y];
-
-                    if(isValid(nx, ny,n,m)){
-                        graph[x][y].add(new Node(nx, ny, map[nx][ny]));
-                    }
-
-                }
-            }
-        }
+        
 
         int[][] dist = new int[n][m];
 
@@ -71,7 +46,7 @@ public class Main {
             Node current = pq.poll();
 
             if(dist[current.x][current.y]!=current.cnt)continue;
-            
+
             for(int[] d: directions){
                 int nx = current.x+d[X];
                 int ny = current.y+d[Y];
