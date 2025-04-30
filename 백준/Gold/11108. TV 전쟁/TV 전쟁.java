@@ -39,6 +39,9 @@ public class Main {
             //해당 프로그램에서 가장 직전에 끝나는 프로그램을 이분탐색으로 구한다.
             //nonIntervalIdx 배열을 완성한다.
             int[] nonIntervalIdx = new int[n];
+            long[] dp = new long[n];
+            //dp[i] = i번째 프로그램까지 고려했을 경우 가족들의 선호도
+            dp[0] = programs[0].score;
             for(int i=0; i<n; i++){
 
                 int l = 0;
@@ -54,22 +57,21 @@ public class Main {
                     }
                 }
                 nonIntervalIdx[i] = idx;
-            }
 
-
-            long[] dp = new long[n];
-            //dp[i] = i번째 프로그램까지 고려했을 경우 가족들의 선호도
-            dp[0] = programs[0].score;
-
-            for(int i=1; i<n; i++){
                 long tmpScoreTot = programs[i].score;
+
 
                 if(nonIntervalIdx[i]!=-1){
                     tmpScoreTot += dp[nonIntervalIdx[i]];
                 }
+                if(i==0){
+                    dp[i] = programs[i].score;
+                }else{
+                    dp[i] = Math.max(dp[i-1], tmpScoreTot);
+                }
 
-                dp[i] = Math.max(dp[i-1], tmpScoreTot);
             }
+
 
 
             result.append(dp[n-1]).append("\n");
