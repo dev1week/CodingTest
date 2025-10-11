@@ -7,17 +7,24 @@ class Solution {
         
         List<Long> numbers = getPartNumbers(kDigit);
         
-        int cnt = 0;
+        int primeCnt = getPrimeCnt(numbers);
         
+        
+        return primeCnt;
+    }
+    
+    private int getPrimeCnt(List<Long> numbers){
+        int cnt = 0; 
         for(long number: numbers){
-            if(isDecimal(number)){
+            if(isPrime(number)){
                 cnt++; 
             }
         }
-        return cnt;
+        
+        return cnt; 
     }
     
-    private boolean isDecimal(long number){
+    private boolean isPrime(long number){
         if(number==1)return false; 
         
         for(int i=2; i<=Math.sqrt(number); i++){
